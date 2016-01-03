@@ -4,6 +4,7 @@ $(document).ready(function(){
 
 	// Global variables
 	var numToGuess;
+	var guessCnt;
 	
 	/*--- Display information modal box ---*/
   	$(".what").click(function(){
@@ -26,8 +27,10 @@ $(document).ready(function(){
 		numToGuess = Math.round(Math.random()*100);
 		console.log(numToGuess);
 		// Reset text and count
+		guessCnt = 0;
 		$("#feedback").empty().append("Make your Guess!");
-		$("#count").empty().append("0");
+		$("#count").empty().append(guessCnt);
+		$("#guessList ul").empty();	// Not working
 	};
 
 	// Process a guess
@@ -35,9 +38,19 @@ $(document).ready(function(){
 		// stop submit from refreshing the page
 		event.preventDefault();
 
-		var guess = $("#userGuess").val();
-		var diff = Math.abs(guess - numToGuess);
+		// Get user input and validate
+		var guess = parseInt($("#userGuess").val(),10);
+		if (guess < 1 || guess > 100){
+			$("#feedback").empty().append("Must be between 1 and 100");
+			return false;
+		}
+		if (!$.isNumeric(guess)){
+			$("#feedback").empty().append("That's not a number!");
+			return false;
+		}
 
+		// Check the guess
+		var diff = Math.abs(guess - numToGuess);
 		switch(true){
 			case (diff === 0):
 				$("#feedback").empty().append("You guessed right!");
@@ -61,6 +74,12 @@ $(document).ready(function(){
 				$("#feedback").empty().append("Make your Guess!");
 				break;
 		};
+		// Increment count
+		guessCnt++;
+		$("#count").empty().append(guessCnt);
+
+		// Add guessed number to list
+		$("#guessList").append("<li>"+guess);
 	});
 
 	// Create new game on page load
