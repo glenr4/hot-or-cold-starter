@@ -30,7 +30,8 @@ $(document).ready(function(){
 		guessCnt = 0;
 		$("#feedback").empty().append("Make your Guess!");
 		$("#count").empty().append(guessCnt);
-		$("#guessList ul").empty();	// Not working
+		$("#guessList").empty();
+		$(".game form [name='userGuess']").val("");
 	};
 
 	// Process a guess
@@ -80,6 +81,9 @@ $(document).ready(function(){
 
 		// Add guessed number to list
 		$("#guessList").append("<li>"+guess);
+
+		// Clear form input
+		$(".game form [name='userGuess']").val("");
 	});
 
 	// Create new game on page load
